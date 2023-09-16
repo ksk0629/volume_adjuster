@@ -41,6 +41,34 @@ class VolumeAdjuster:
         self.__target_file_paths: list[str] = []
         self.__target_data: list[AudioSegment] = []
         self.__adjusted_data: list[AudioSegment] = []
+    
+    @property
+    def input_dir_path(self) -> str:
+        return self.__input_dir_path
+    
+    @property
+    def extensions(self) -> list[str]:
+        return self.__extensions
+    
+    @property
+    def target_dbfs(self) -> float:
+        return self.__target_dbfs
+    
+    @property
+    def output_dir_path(self) -> str:
+        return self.__output_dir_path
+    
+    @property
+    def target_file_paths(self) -> list[str]:
+        return self.__target_file_paths
+    
+    @property
+    def target_data(self) -> list[AudioSegment]:
+        return self.__target_data
+    
+    @property
+    def adjusted_data(self) -> list[AudioSegment]:
+        return self.__adjusted_data
 
     def __set_all_targets(self):
         """Set all target file paths to self.__target_file_paths."""
