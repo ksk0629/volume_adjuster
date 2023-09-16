@@ -10,29 +10,33 @@ from .type_checker import TypeChecker
 class VolumeAdjuster:
     """Volume adjuster class"""
 
-    def __init__(self, dir_path: str, extensions: list[str], target_dbfs: float):
+    def __init__(self, input_dir_path: str, extensions: list[str], target_dbfs: float, 
+                 output_dir_path: str):
         """Initialise the member variables.
 
-        :param str dir_path: a path to a target directory
+        :param str input_dir_path: a path to a target input directory
         :param list[str] extensions: a list of a target extensions
         :param float target_dbfs: a target decibel relative to the maximum possible loudness
+        :param str output_dir_path: a path to a target output directory
         """
         # Create TypeChecker object.
         self.__type_checker = TypeChecker()
 
         # Check the types of the arguments.
-        self.__type_checker.validate_basic_type("dir_path", dir_path, str)
+        self.__type_checker.validate_basic_type("input_dir_path", input_dir_path, str)
         self.__type_checker.validate_basic_type("extensions", extensions, list)
-        self.__type_checker.validate_basic_type("dir_path", dir_path, str)
+        self.__type_checker.validate_basic_type("target_dbfs", target_dbfs, float)
+        self.__type_checker.validate_basic_type("output_dir_path", output_dir_path, str)
         self.__type_checker.validate_list_elements_type("extensions", extensions, str)
 
         # Initialise member variables.
-        self.__dir_path: str = dir_path
+        self.__input_dir_path: str = input_dir_path
         self.__extensions: list[str] = map(
             # Add if there is no "." at the top of the extension
             lambda x: x if x[0] == "." else "." + x, extensions
         )
         self.__target_dbfs: float = target_dbfs
+        self.__output_dir_path: str = output_dir_path
 
         self.__target_file_paths: list[str] = []
         self.__target_data: list[AudioSegment] = []
@@ -41,7 +45,7 @@ class VolumeAdjuster:
     def __set_all_targets(self):
         """Set all target file paths to self.__target_file_paths."""
         # Get all file paths under the target directory.
-        all_file_paths: list[str] = glob.glob(os.path.join(self.__dir_path, "*"))
+        all_file_paths: list[str] = glob.glob(os.path.join(self.__input_dir_path, "*"))
 
         # Extract only file paths whose extension is in self.__extensions.
         self.__target_file_paths = filter(
@@ -78,8 +82,11 @@ class VolumeAdjuster:
         for target_file_path, adjusted_data in zip(
             self.__target_file_paths, self.__adjusted_data
         ):
+            # Create the output file_path.
+            output_file_path = os.path.join(self.__output_dir_path, os.path.basename(target_file_path))
+            # Save the audio data.
             adjusted_data.export(
-                target_file_path, format=os.path.splitext(target_file_path)[1][1:]
+                output_file_path, format=os.path.splitext(output_file_path)[1][1:]
             )
 
     def run(self):
