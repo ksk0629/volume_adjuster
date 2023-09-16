@@ -1,6 +1,12 @@
+import tempfile
+
 import pytest
 
-from src.example_package.example_class import ExampleClass
+
+@pytest.fixture
+def tmp_dir():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        yield tmp_dir
 
 
 @pytest.fixture(scope="function")
