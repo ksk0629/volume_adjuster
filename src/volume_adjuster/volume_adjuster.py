@@ -31,10 +31,10 @@ class VolumeAdjuster:
 
         # Initialise member variables.
         self.__input_dir_path: str = input_dir_path
-        self.__extensions: list[str] = map(
+        self.__extensions: list[str] = list(map(
             # Add if there is no "." at the top of the extension
             lambda x: x if x[0] == "." else "." + x, extensions
-        )
+        ))
         self.__target_dbfs: float = target_dbfs
         self.__output_dir_path: str = output_dir_path
 
@@ -76,12 +76,15 @@ class VolumeAdjuster:
         all_file_paths: list[str] = glob.glob(os.path.join(self.__input_dir_path, "*"))
 
         # Extract only file paths whose extension is in self.__extensions.
-        self.__target_file_paths = filter(
+        self.__target_file_paths = list(filter(
             lambda x: os.path.splitext(x)[1] in self.__extensions, all_file_paths
-        )
+        ))
 
         # Open all target files.
-        self.__target_data = list(map(AudioSegment, self.__target_file_paths))
+        self.__target_data = list(map(
+            AudioSegment.from_file, 
+            self.__target_file_paths
+        ))
 
     @staticmethod
     def adjust(audio_data: AudioSegment, target_dbfs: float) -> AudioSegment:
@@ -91,15 +94,16 @@ class VolumeAdjuster:
         :param float target_dbfs: a target decibel relative to the maximum possible loudness
         :return AudioSegment: the adjusted audio data
         """
-        diff_dbfs = audio_data - target_dbfs
+        diff_dbfs = audio_data.dBFS - target_dbfs
         return audio_data - diff_dbfs
 
     def __adjust_all_targets(self):
         """Adjust the volumes of all target audio data.
         """
+        adjust_of_fixed_target_dbfs = functools.partial(self.adjust, target_dbfs=self.__target_dbfs)
         self.__adjusted_data = list(
             map(
-                functools.partial(self.adjust, target_dbfs=self.__target_dbfs),
+                adjust_of_fixed_target_dbfs,
                 self.__target_data,
             )
         )
@@ -111,15 +115,24 @@ class VolumeAdjuster:
             self.__target_file_paths, self.__adjusted_data
         ):
             # Create the output file_path.
-            output_file_path = os.path.join(self.__output_dir_path, os.path.basename(target_file_path))
+            pre_output_file_path = os.path.join(self.__output_dir_path, os.path.basename(target_file_path))
+            output_file_basename, _ = os.path.splitext(pre_output_file_path)
+            output_file_path = output_file_basename + ".mp3"
+            
             # Save the audio data.
             adjusted_data.export(
-                output_file_path, format=os.path.splitext(output_file_path)[1][1:]
+                output_file_path, format="mp3"
             )
 
     def run(self):
         """Load all target audio data, adjust the volumes and save them.
         """
+        print("Obtaining target files => ", end="", flush=True)
         self.__set_all_targets()
+        print("DONE", flush=True)
+        print("Adjusting volumes => ", end="", flush=True)
         self.__adjust_all_targets()
+        print("DONE", flush=True)
+        print("Saving files => ", end="", flush=True)
         self.__save_adjusted_data()
+        print("DONE", flush=True)
