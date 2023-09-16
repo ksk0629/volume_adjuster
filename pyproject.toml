@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "template-py-package"
+name = "volume_adjuster"
 version = "0.1.0"
-description = "A small example package"
+description = "Adjust volume of sound files"
 authors = ["ksk0629 <neko.to.tomodachi.muse@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "src/example_package"}]
+packages = [{include = "src/volume_adjuster"}]
 repository = "https://github.com/ksk0629/template_py_package"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -14,10 +14,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
-
-[tool.poetry.scripts]
-run_example = "src.example_package.example:main"
-
+pydub = "^0.25.1"
+jupyter = "^1.0.0"
+notebook = "^7.0.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.2"
@@ -32,7 +31,4 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.pytest.ini_options]
-markers = [
-    "add_number: marks tests for add_number function",
-    "example_class: marks tests for ExmapleClass Class"
-]
+markers = []
