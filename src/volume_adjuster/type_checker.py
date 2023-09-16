@@ -7,8 +7,8 @@ class TypeChecker:
     def validate_basic_type(self, object_name: str, object: any, type: any):
         """Validate if the type of the given object is as same as the given type.
 
-        :param str object_name: the name of the object
-        :param any object: the target object
+        :param str object_name: a name of an object
+        :param any object: a target object
         :param any type: the expected type of the object
         :raises TypeError: raise if the type of the given object is not as same as the given type.
         """
@@ -23,9 +23,9 @@ class TypeChecker:
     ):
         """Validate if the type of every element of the given list is as same as tye given type.
 
-        :param str object_name: the name of the object
-        :param List[any] target_list: the target list
-        :param any type: the expected type of every element
+        :param str object_name: a name of an object
+        :param List[any] target_list: a target list
+        :param any type: the expected type of every element of the target list
         :raises TypeError: raise if the type of every element of the given list is no as same as the given type.
         """
         try:
