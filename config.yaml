@@ -1,0 +1,6 @@
+input_dir_path: "path/to/input/directory"
+extensions:
+  - .mp3
+  - .m4a
+target_dbfs: -34.0
+output_dir_path: "path/to/output/directory"
