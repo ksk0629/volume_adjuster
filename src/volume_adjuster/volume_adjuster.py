@@ -1,7 +1,6 @@
 import functools
 import glob
 import os
-from typing import List
 
 from pydub import AudioSegment
 
@@ -11,7 +10,7 @@ from .type_checker import TypeChecker
 class VolumeAdjuster:
     """Volume adjuster class"""
 
-    def __init__(self, dir_path: str, extensions: List[str], target_dbfs: float):
+    def __init__(self, dir_path: str, extensions: list[str], target_dbfs: float):
         # Create type checker
         self.__type_checker = TypeChecker()
 
@@ -23,19 +22,19 @@ class VolumeAdjuster:
 
         # Initialise member variables.
         self.__dir_path: str = dir_path
-        self.__extensions: List[str] = map(
+        self.__extensions: list[str] = map(
             lambda x: x if x[0] == "." else "." + x, extensions
         )
         self.__target_dbfs: float = target_dbfs
 
-        self.__target_file_paths: List[str] = []
-        self.__target_data: List[AudioSegment] = []
-        self.__adjusted_data: List[AudioSegment] = []
+        self.__target_file_paths: list[str] = []
+        self.__target_data: list[AudioSegment] = []
+        self.__adjusted_data: list[AudioSegment] = []
 
     def __set_all_targets(self):
         """Set all target file paths to self.__target_file_paths."""
         # Get all file paths.
-        all_file_paths: List[str] = glob.glob(os.path.join(self.__dir_path, "*"))
+        all_file_paths: list[str] = glob.glob(os.path.join(self.__dir_path, "*"))
 
         # Extract only file paths whose extension is in self.__extensions.
         self.__target_file_paths = filter(
