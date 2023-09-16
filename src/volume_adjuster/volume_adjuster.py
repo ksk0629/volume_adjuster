@@ -4,7 +4,7 @@ import os
 
 from pydub import AudioSegment
 
-from .type_checker import TypeChecker
+from src.volume_adjuster.type_checker import TypeChecker
 
 
 class VolumeAdjuster:

@@ -13,9 +13,7 @@ class TypeChecker:
         :raises TypeError: raise if the type of the given object is not as same as the given type.
         """
         if not isinstance(object, type):
-            msg: str = f'''The type of {object_name} has to be {type}.
-            But it is {type(object)}.
-            '''
+            msg: str = f"The type of {object_name} has to be {type}. But it is {type(object)}."
             raise TypeError(msg)
 
     def validate_list_elements_type(
@@ -34,7 +32,5 @@ class TypeChecker:
                     object_name=object_name, object=element, type=type
                 )
         except:
-            msg: str = f'''The type of every elements in {object_name} has to be {type}.
-            But at least one of them is not.
-            '''
+            msg: str = f"The type of every elements in {object_name} has to be {type}. But at least one of them is not."
             raise TypeError(msg)
