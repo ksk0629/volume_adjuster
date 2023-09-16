@@ -31,4 +31,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.pytest.ini_options]
-markers = []
+markers = [
+    "volume_adjuster: marks tests for VolumeAdjuster class",
+    "type_checker: marks test for TypeChecker class"
+]
