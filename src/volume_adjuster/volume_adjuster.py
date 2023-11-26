@@ -121,15 +121,19 @@ class VolumeAdjuster:
         for target_file_path, adjusted_data in zip(
             self.__target_file_paths, self.__adjusted_data
         ):
-            # Create the output file_path.
-            pre_output_file_path = os.path.join(
+            # Create the output file_path.            
+            output_file_path = os.path.join(
                 self.__output_dir_path, os.path.basename(target_file_path)
             )
-            output_file_basename, _ = os.path.splitext(pre_output_file_path)
-            output_file_path = output_file_basename + ".mp3"
+            _, output_file_extension = os.path.splitext(output_file_path)
+            
+            # Set the apporopriate format.
+            format: str = output_file_extension[1:] # without dot
+            if output_file_extension == ".m4a":
+                format = "ipod"
 
             # Save the audio data.
-            adjusted_data.export(output_file_path, format="mp3")
+            adjusted_data.export(output_file_path, format=format)
 
     def run(self):
         """Load all target audio data, adjust the volumes and save them."""
